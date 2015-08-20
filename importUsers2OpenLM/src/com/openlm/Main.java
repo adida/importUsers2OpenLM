@@ -11,7 +11,7 @@ import java.io.IOException;
 public class Main {
     private static connectToOpenLM olmConnector;
     private static String getAllUsersRequest = "<ULM><MESSAGE type=\"GetUsersForPage\"   /><SESSION sessionId=\"0\" refresh=\"true\" /><PAGING start_record=\"0\" end_record=\"99999\"  sort=\"\" dir=\"\" search=\"\"/><SHOW_DISABLED>false</SHOW_DISABLED> </ULM>\n";
-    private static String addUserRequest = "<ULM><MESSAGE type=\"AddUser2\" /><SESSION sessionId=\"#SessionID#\" /><PARAMETERS><PARAM name=\"user_name\">#username#</PARAM><PARAM name=\"first_name\">#first#</PARAM><PARAM name=\"last_name\">#lastName#</PARAM><PARAM name=\"display_name\"></PARAM><PARAM name=\"title\">Mr.</PARAM><PARAM name=\"department\"></PARAM><PARAM name=\"phone_number\"></PARAM><PARAM name=\"description\"></PARAM><PARAM name=\"office\"></PARAM><PARAM name=\"email\">#email#</PARAM><PARAM name=\"enabled\">true</PARAM><PARAM name=\"password\"><![CDATA[]]></PARAM><PARAM name=\"repassword\"><![CDATA[]]></PARAM></PARAMETERS><PROJECTS default_project_id=\"\"></PROJECTS><GROUPS default_group_id=\"\"></GROUPS ></ULM>";
+    private static String addUserRequest = "<ULM><MESSAGE type=\"AddUser2\" thousands_separator=\",\" timezone=\"Israel Standard Time\" timeformat=\"dd/mm/yyyy hh:mm:ss\" decimalseparator=\".\"/><SESSION sessionId=\"#SessionID#\" /><PARAMETERS><PARAM name=\"user_name\">#username#</PARAM><PARAM name=\"first_name\">#first#</PARAM><PARAM name=\"last_name\">#lastName#</PARAM><PARAM name=\"display_name\"></PARAM><PARAM name=\"title\">Mr.</PARAM><PARAM name=\"department\"></PARAM><PARAM name=\"phone_number\"></PARAM><PARAM name=\"description\"></PARAM><PARAM name=\"office\"></PARAM><PARAM name=\"email\">#email#</PARAM><PARAM name=\"enabled\">true</PARAM><PARAM name=\"password\"><![CDATA[]]></PARAM><PARAM name=\"repassword\"><![CDATA[]]></PARAM></PARAMETERS><PROJECTS default_project_id=\"\"></PROJECTS><GROUPS default_group_id=\"\"></GROUPS ></ULM>";
     private static String updateUserRequest = "<ULM><MESSAGE type=\"UpdateUserDetails2\" /><SESSION sessionId=\"#SessionID#\" /><PARAMETERS><PARAM name=\"userid\">#userID#</PARAM><PARAM name=\"user_name\">#username#</PARAM><PARAM name=\"first_name\">#first#</PARAM><PARAM name=\"last_name\">#lastName#</PARAM><PARAM name=\"display_name\"><![CDATA[kajsdhf]]></PARAM><PARAM name=\"title\"><![CDATA[Mr.]]></PARAM><PARAM name=\"department\"><![CDATA[]]></PARAM><PARAM name=\"phone_number\"></PARAM><PARAM name=\"description\"><![CDATA[]]></PARAM><PARAM name=\"office\"><![CDATA[]]></PARAM><PARAM name=\"email\">#email#</PARAM><PARAM name=\"enabled\">true</PARAM></PARAMETERS></ULM>";
     private static String AuthenticationRequest = "<ULM><MESSAGE type=\"UserAuthentication\" /><NAME>#username#</NAME><PWD><![CDATA[#password#]]></PWD></ULM>";
     // Statistics counters:
@@ -58,7 +58,6 @@ public class Main {
         readCSV.openFile();
 
 
-        connectToOpenLM olmConnector;
         olmConnector = new connectToOpenLM();
 
         // Authenticate with OpenLM Server if needed
@@ -125,7 +124,8 @@ public class Main {
 
             } else {
                 // create new
-                if (addUser(users[0], users[1], users[2], users[3])) {
+                boolean userAdded = addUser(users[0], users[1], users[2], users[3]);
+                if (userAdded) {
                     new_users = new_users + 1;
                 } else {
                     failed = failed + 1;

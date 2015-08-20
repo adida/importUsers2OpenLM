@@ -1,5 +1,5 @@
 <component name="ArtifactManager">
-  <artifact type="jar" name="importCSV2OpenLM:jar">
+  <artifact type="jar" build-on-make="true" name="importCSV2OpenLM:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/importCSV2OpenLM_jar</output-path>
     <root id="archive" name="importCSV2OpenLM.jar">
       <element id="module-output" name="importCSV2OpenLM" />
