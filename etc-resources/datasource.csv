@@ -1,0 +1,2 @@
+UserName,FirstName,LastName,DisplayName,Title,Department,PhoneNumber,Description,Office,Email,Enabled,Groups,DefaultGroup,Projects,DefaultProject
+john.smith,John,Smith,John Smith,Mr.,Dept,(555)-555-55-55,Description,Office,john@gmail.com,true,group1|group2,group1,project1|project2,project1
