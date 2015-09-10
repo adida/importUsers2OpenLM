@@ -50,8 +50,9 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <outputDirectory>${target.dir}</outputDirectory>
                     <shadedArtifactAttached>true</shadedArtifactAttached> <!-- Make the shaded artifact not the main one -->
-                    <shadedClassifierName>shaded</shadedClassifierName> <!-- set the suffix to the shaded jar -->
+                    <shadedClassifierName>all</shadedClassifierName> <!-- set the suffix to the shaded jar -->
                 </configuration>
             </plugin>
 
