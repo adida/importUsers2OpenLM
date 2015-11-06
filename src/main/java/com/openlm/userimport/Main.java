@@ -13,6 +13,8 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class Main{
+    static final String OPEN_LM_EVERYONE = "OpenLM_Everyone";
+
     final Properties configuration;
     final IOpenLMServerAPI serverApi;
     final File csv;
@@ -63,6 +65,10 @@ public class Main{
             collect(record, "Projects", this.projects);
             this.userNamesToImport.add(record.get("UserName"));
         });
+        if(groups.containsKey(OPEN_LM_EVERYONE)){
+            System.out.println("WARNING: OpenLM_Everyone group is not allowed to add user to");
+            groups.remove(OPEN_LM_EVERYONE);
+        }
         loadAndUpdateGroups();
         loadAndUpdateProjects();
 //        this.serverApi.loadExistingUsers(this.userNamesToImport);
@@ -128,6 +134,8 @@ public class Main{
     }
 
     private void loadAndUpdateProjects() {
+        if(this.projects.isEmpty()) return;
+
         loadId(this.serverApi::loadProjects, this.projects);
         if (this.allowToAddMissingEntities) {
             this.projects.entrySet().stream()
@@ -142,6 +150,8 @@ public class Main{
     }
 
     private void loadAndUpdateGroups() {
+        if(this.groups.isEmpty()) return;
+
         loadId(this.serverApi::loadGroups, this.groups);
         if (this.allowToAddMissingEntities) {
             this.groups.entrySet().stream()
