@@ -14,7 +14,7 @@ OpenLM benefits all Software Asset Management (SAM) role players in the organiza
 importUsers2OpenLM is a free, open-source software tool that was implemented according to OpenLM’s customers’ requests. It makes use of the OpenLM open APIs to easily introduce new users, user groups and projects from a CSV file into the OpenLM database. 
 
 ##Download and installation##
-importUsers2OpenLM is [published for free use on the github site]https://github.com/orengabay/importUsers2OpenLM/releases/tag/2.0.0. Simply download the openlm-userimport-2.0-full.zip file to your computer, and unzip it. Copy the unzipped folder to the OpenLM Server machine, adjacent the OpenLM Server installation folder, e.g.:
+importUsers2OpenLM is [published for free use on the github site](https://github.com/orengabay/importUsers2OpenLM/releases/tag/2.0.0). Simply download the openlm-userimport-2.0-full.zip file to your computer, and unzip it. Copy the unzipped folder to the OpenLM Server machine, adjacent the OpenLM Server installation folder, e.g.:
 C:\Program Files (x86)\OpenLM.
 You will need to have Java 8 installed on the OpenLM Server machine in order to run the tool. 
 
@@ -43,18 +43,18 @@ Edit the file to reflect the information that needs to be imported to the OpenLM
 By default, the datasource.csv file already contains a single user (John Smith) as an example.
 UserName|FirstName|LastName|DisplayName|Title|Department|PhoneNumber|Description|Office|Email|Enabled|Groups|DefaultGroup|Projects|DefaultProject
 --------|---------|--------|-----------|-----|----------|-----------|-----------|------|-----|-------|------|------------|--------|-------------
-john.smith|JohnSmith|John Smith|Mr.|Dept|(555)-555-55-55|Description|Office|john@gmail.com|true|group1&#124;group2|group1|project1&#124;project2|project1
+john.smith|John|Smith|John Smith|Mr.|Dept|(555)-555-55-55|Description|Office|john@gmail.com|true|group1&#124;group2|group1|project1&#124;project2|project1
 
 
 Notes:
-*1. CSV format*
-Some spreadsheet editors may add additional delimiters to the file (e.g. Tabs) during save. Take care to save the CSV file as a valid Comma separated file.
-*2. The conditional OR symbol (‘|’)*
-Introduce multiple string values, in the ‘Groups’ and ‘Projects’ membership categories.
-*2. Default group:* 
-Group License usage data will only be accumulated and attributed to the user’s Default group. When a user has no default group is assigned to them, their group usage will attributed to the default OpenLM_Everyone group.
-*3. Default Project:*
-Project license usage will be attributed to this project by default. License usage may be dynamically routed to other projects in which the user is a member of. [Read more about this here]https://www.openlm.com/application-notes-v3-0/monitoring-app-usage-v3-0-2/license-usage-monitoring-according-to-projects-an4030/.
+1. CSV format
+    Some spreadsheet editors may add additional delimiters to the file (e.g. Tabs) during save. Take care to save the CSV file as a valid Comma separated file.
+2. The conditional OR symbol (‘|’)
+    Introduce multiple string values, in the ‘Groups’ and ‘Projects’ membership categories.
+3. Default group:
+    Group License usage data will only be accumulated and attributed to the user’s Default group. When a user has no default group is assigned to them, their group usage will attributed to the default OpenLM_Everyone group.
+4. Default Project:
+    Project license usage will be attributed to this project by default. License usage may be dynamically routed to other projects in which the user is a member of. [Read more about this here]https://www.openlm.com/application-notes-v3-0/monitoring-app-usage-v3-0-2/license-usage-monitoring-according-to-projects-an4030/.
 
 
 ##Running importUsers2OpenLM##
