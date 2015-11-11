@@ -41,9 +41,9 @@ Open the datasource.csv file:
 C:\Program Files (x86)\OpenLM\importUsers2OpenLM-version2.0\etc-resources\datasource.csv
 Edit the file to reflect the information that needs to be imported to the OpenLM database.
 By default, the datasource.csv file already contains a single user (John Smith) as an example.
-|UserName|FirstName|LastName|DisplayName|Title|Department|PhoneNumber|Description|Office|Email|Enabled|Groups|DefaultGroup|Projects|DefaultProject|
-|--------|---------|--------|-----------|-----|----------|-----------|-----------|------|-----|-------|------|------------|--------|-------------|
-|john.smith|JohnSmith|John Smith|Mr.|Dept|(555)-555-55-55|Description|Office|john@gmail.com|true|group1&#124;group2|group1|project1&#124;project2|project1|
+UserName|FirstName|LastName|DisplayName|Title|Department|PhoneNumber|Description|Office|Email|Enabled|Groups|DefaultGroup|Projects|DefaultProject
+--------|---------|--------|-----------|-----|----------|-----------|-----------|------|-----|-------|------|------------|--------|-------------
+john.smith|JohnSmith|John Smith|Mr.|Dept|(555)-555-55-55|Description|Office|john@gmail.com|true|group1&#124;group2|group1|project1&#124;project2|project1
 
 
 Notes:
@@ -71,11 +71,10 @@ On a clean OpenLM database I have defined:
 
 I ran the tool with the following CSV content:
 
-|UserName|FirstName|LastName| ... |Groups|DefaultGroup|
-|-----|-----|-----|-----|-----|-----|
-|U1|U1_first|U1_last| ... | G1 | G1 |
-|-----|-----|-----|-----|-----|-----|
-|U2|U2_first| | ... | G1&#124;G2|G2|
+UserName|FirstName|LastName| ... |Groups|DefaultGroup
+-----|-----|-----|-----|-----|-----
+U1|U1_first|U1_last| ... |G1|G1
+U2|U2_first| | ... | G1&#124;G2|G2
 
 As a result of running the importUsers2OpenLM tool, the group membership and users’ attributes has changed as follows:
 ![Image01](/images/image01.png)
