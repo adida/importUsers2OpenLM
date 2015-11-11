@@ -31,7 +31,7 @@ Edit the content of this file to change the importUsers2OpenLM settings:
 * allow.to.add.entities (Default - True):
   * True: Create new groups, projects and users from CSV file.
   * False: Update existing user details only
-* merge.user.details.on.update (Default - True):\s\s
+* merge.user.details.on.update (Default - True):
   * True: Empty CSV fields are merged with values from existing users’ records.
   * False: Empty CSV fields override values from existing users’ records.
 
@@ -47,14 +47,14 @@ UserName|FirstName|LastName|DisplayName|Title|Department|PhoneNumber|Description
 john.smith|John|Smith|John Smith|Mr.|Dept|(555)-555-55-55|Description|Office|john@gmail.com|true|group1&#124;group2|group1|project1&#124;project2|project1
 
 
-Notes:
-__1. CSV format__  
+Notes:  
+1. __CSV format__  
     Some spreadsheet editors may add additional delimiters to the file (e.g. Tabs) during save. Take care to save the CSV file as a valid Comma separated file.
-__2. The conditional OR symbol (‘|’)__  
+2. __The conditional OR symbol (‘|’)__    
     Introduce multiple string values, in the ‘Groups’ and ‘Projects’ membership categories.
-__3. Default group:__  
+3. __Default group:__    
     Group License usage data will only be accumulated and attributed to the user’s Default group. When a user has no default group is assigned to them, their group usage will attributed to the default OpenLM_Everyone group.
-__4. Default Project:__  
+4. __Default Project:__    
     Project license usage will be attributed to this project by default. License usage may be dynamically routed to other projects in which the user is a member of. [Read more about this here](https://www.openlm.com/application-notes-v3-0/monitoring-app-usage-v3-0-2/license-usage-monitoring-according-to-projects-an4030/).
 
 
