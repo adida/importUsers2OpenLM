@@ -1,73 +1,81 @@
-importUsers2OpenLM
+OpenLM License management and monitoring
 ==================
+OpenLM is a comprehensive tool for software license management and monitoring. It interfaces a wide variety of license server types (e.g. Flexera Flexnet Publisher, DSLS) and provides
+* Real-time license usage information,
+* License usage reports according to user names, user groups, projects and hosts, 
+* Historical license usage statistics and patterns.
 
-Import users CSV file into OpenLM Server.
+OpenLM benefits all Software Asset Management (SAM) role players in the organization by
+* Maintaining license inventory,
+* Boosting license usage efficiency and availability, and
+* Keeping license administrators ready for software audits at all times.
 
-The purpose of the software is to import new users or update users details from a CSV file to OpenLM server. The software works with OpenLM License Management software  - www.openlm.com
+##importUsers2OpenLM##
+importUsers2OpenLM is a free, open-source software tool that was implemented according to OpenLM’s customers’ requests. It makes use of the OpenLM open APIs to easily introduce new users, user groups and projects from a CSV file into the OpenLM database. 
 
-This is a Java software that uses the OpenLM API in order to upload/synchronize users between CSV file and the OpenLM server.
+##Download and installation##
+importUsers2OpenLM is [published for free use on the github site]https://github.com/orengabay/importUsers2OpenLM/releases/tag/2.0.0. Simply download the openlm-userimport-2.0-full.zip file to your computer, and unzip it. Copy the unzipped folder to the OpenLM Server machine, adjacent the OpenLM Server installation folder, e.g.:
+C:\Program Files (x86)\OpenLM.
+You will need to have Java 8 installed on the OpenLM Server machine in order to run the tool. 
 
-####How to build:####
-Java 8 and Maven are required to build it.
-```
-mvn clean package
-```
+##Configuration files##
+###1. config.properties###
+Use Notepad to open the config.properties file:
+C:\Program Files (x86)\OpenLM\importUsers2OpenLM-version2.0\etc-resources\config.properties
+Edit the content of this file to change the importUsers2OpenLM settings:
 
-####How does it work:####
-1. The program reads settings from config.properties file
-2. CSV file is scanned for groups, projects and user names
-3. Existing users, groups and projects are loaded from OpenLM server
-4. If allow.to.add.entities is true the new groups and projects are added to OpenLM
-5. The programs scans the CSV file again to import user details to OpenLM line by line
-6. If merge.user.details.on.update is true the empty fields from CSV are replaced with values of same username from OpenLM
-7. If allow.to.add.entities=true the tool creates new users as well as updates the ones existed in OpenLM
-
-####Authentication:
-There are two ways to provide user credentials if they are required by OpenLM server
-1. Edit config.properties file to specify your account login and password
-```
-login=
-password=
-```
-2. If you care about securing of your password, you can leave those fields empty. The import tool captures login and password from the command line too. Make sure to use java.exe not javaw.exe to run import in this case.
+* Login, Password (Optional fields):
+  Type in an optional login name and password. 
+* xml.api.url (Default - http://localhost:7014/OpenLMServer):
+  Hostname and port number of the OpenLM Server. 
+* allow.to.add.entities (Default - True):
+  * True: Create new groups, projects and users from CSV file.
+  * False: Update existing user details only
+* merge.user.details.on.update (Default - True):
+  * True: Empty CSV fields are merged with values from existing users’ records.
+  * False: Empty CSV fields override values from existing users’ records.
 
 
-####Input CSV file format:####
-The software expects to get a file in CSV format with the list of the user.
-```
-UserName,FirstName,LastName,DisplayName,Title,Department,PhoneNumber,Description,Office,Email,Enabled,Groups,DefaultGroup,Projects,DefaultProject
-john.smith,John,Smith,John Smith,Mr.,Dept,(555)-555-55-55,Description,Office,john@gmail.com,true,group1|group2,group1,project1|project2,project1
-```
-Make sure your CSV file includes exactly the same heading line.
+###2. datasource.csv###
+Open the datasource.csv file:
+C:\Program Files (x86)\OpenLM\importUsers2OpenLM-version2.0\etc-resources\datasource.csv
+Edit the file to reflect the information that needs to be imported to the OpenLM database.
+By default, the datasource.csv file already contains a single user (John Smith) as an example.
+|UserName|FirstName|LastName|DisplayName|Title|Department|PhoneNumber|Description|Office|Email|Enabled|Groups|DefaultGroup|Projects|DefaultProject|
+|--------|---------|--------|-----------|-----|----------|-----------|-----------|------|-----|-------|------|------------|--------|-------------|
+|john.smith|JohnSmith|John Smith|Mr.|Dept|(555)-555-55-55|Description|Office|john@gmail.com|true|group1&#124;group2|group1|project1&#124;project2|project1|
 
-####Java config.properties file format:####
-The config.properties file specify the following information
 
-|Information|tag|
-|-----------|---|
-|OpenLM username - relevant only when authentication is required|login =|
-|OpenLM password - relevant only when authentication is required|password =|
-|OpenLM server URL|xml.api.url=|
-|Allow to add new users, groups and projects to OpenLM|allow.to.add.entities=true/false|
-|Merge CSV file data with existing user details|merge.user.details.on.update=true/false|
+Notes:
+*1. CSV format*
+Some spreadsheet editors may add additional delimiters to the file (e.g. Tabs) during save. Take care to save the CSV file as a valid Comma separated file.
+*2. The conditional OR symbol (‘|’)*
+Introduce multiple string values, in the ‘Groups’ and ‘Projects’ membership categories.
+*2. Default group:* 
+Group License usage data will only be accumulated and attributed to the user’s Default group. When a user has no default group is assigned to them, their group usage will attributed to the default OpenLM_Everyone group.
+*3. Default Project:*
+Project license usage will be attributed to this project by default. License usage may be dynamically routed to other projects in which the user is a member of. [Read more about this here]https://www.openlm.com/application-notes-v3-0/monitoring-app-usage-v3-0-2/license-usage-monitoring-according-to-projects-an4030/.
 
-Example:
-```
-login=
-password=
-xml.api.url=http://localhost:7014/OpenLMServer
-allow.to.add.entities=true
-merge.user.details.on.update=true
-```
 
-####Usage - how to run (Using Jar file):####
-Java 8 or higher is required to run it.
-```
+##Running importUsers2OpenLM##
+Type the following string on a cmd line prompt to run the importUsers2OpenLM  tool:
 java -jar userimport-2.0-all.jar <csv file name or full path>
-```
 
-####Notes on the code####
-The project code is located in com.openlm.userimport package.
-All other packages are JAX-WS generated code to communicated to OpenLM with SOAP protocol
-com.openlm.userimport.api.soap.WebServiceAPI is incomplete. It servers for demonstration purposes of OpenLM SOAP capabilities
-If you want to generate JAX-WS client for Java make sure to run OpenLM on .NET 4.5 or higher. This way you could use AdminAPI?singleWsdl for wsimport tool
+##Example##
+On a clean OpenLM database I have defined: 
+* Two group (G1, G2)
+* Two users (U1, U2)
+* User U2 is a member of group G1, and already has first & last name attributes .
+
+![Image00](/images/image00.png)
+
+I ran the tool with the following CSV content:
+
+|UserName|FirstName|LastName| ... |Groups|DefaultGroup|
+|-----|-----|-----|-----|-----|-----|
+|U1|U1_first|U1_last| ... | G1 | G1 |
+|-----|-----|-----|-----|-----|-----|
+|U2|U2_first| | ... | G1&#124;G2|G2|
+
+As a result of running the importUsers2OpenLM tool, the group membership and users’ attributes has changed as follows:
+![Image01](/images/image01.png)
