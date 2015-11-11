@@ -24,14 +24,14 @@ Use Notepad to open the config.properties file:
 C:\Program Files (x86)\OpenLM\importUsers2OpenLM-version2.0\etc-resources\config.properties
 Edit the content of this file to change the importUsers2OpenLM settings:
 
-* Login, Password (Optional fields):
+* Login, Password (Optional fields):\s\s
   Type in an optional login name and password. 
-* xml.api.url (Default - http://localhost:7014/OpenLMServer):
+* xml.api.url (Default - http://localhost:7014/OpenLMServer):\s\s
   Hostname and port number of the OpenLM Server. 
-* allow.to.add.entities (Default - True):
+* allow.to.add.entities (Default - True):\s\s
   * True: Create new groups, projects and users from CSV file.
   * False: Update existing user details only
-* merge.user.details.on.update (Default - True):
+* merge.user.details.on.update (Default - True):\s\s
   * True: Empty CSV fields are merged with values from existing users’ records.
   * False: Empty CSV fields override values from existing users’ records.
 
@@ -41,20 +41,21 @@ Open the datasource.csv file:
 C:\Program Files (x86)\OpenLM\importUsers2OpenLM-version2.0\etc-resources\datasource.csv
 Edit the file to reflect the information that needs to be imported to the OpenLM database.
 By default, the datasource.csv file already contains a single user (John Smith) as an example.
+
 UserName|FirstName|LastName|DisplayName|Title|Department|PhoneNumber|Description|Office|Email|Enabled|Groups|DefaultGroup|Projects|DefaultProject
 --------|---------|--------|-----------|-----|----------|-----------|-----------|------|-----|-------|------|------------|--------|-------------
 john.smith|John|Smith|John Smith|Mr.|Dept|(555)-555-55-55|Description|Office|john@gmail.com|true|group1&#124;group2|group1|project1&#124;project2|project1
 
 
 Notes:
-1. CSV format
+__1. CSV format__\s\s
     Some spreadsheet editors may add additional delimiters to the file (e.g. Tabs) during save. Take care to save the CSV file as a valid Comma separated file.
-2. The conditional OR symbol (‘|’)
+__2. The conditional OR symbol (‘|’)__\s\s
     Introduce multiple string values, in the ‘Groups’ and ‘Projects’ membership categories.
-3. Default group:
+__3. Default group:__\s\s
     Group License usage data will only be accumulated and attributed to the user’s Default group. When a user has no default group is assigned to them, their group usage will attributed to the default OpenLM_Everyone group.
-4. Default Project:
-    Project license usage will be attributed to this project by default. License usage may be dynamically routed to other projects in which the user is a member of. [Read more about this here]https://www.openlm.com/application-notes-v3-0/monitoring-app-usage-v3-0-2/license-usage-monitoring-according-to-projects-an4030/.
+__4. Default Project:__\s\s
+    Project license usage will be attributed to this project by default. License usage may be dynamically routed to other projects in which the user is a member of. [Read more about this here](https://www.openlm.com/application-notes-v3-0/monitoring-app-usage-v3-0-2/license-usage-monitoring-according-to-projects-an4030/).
 
 
 ##Running importUsers2OpenLM##
