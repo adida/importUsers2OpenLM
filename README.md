@@ -14,7 +14,7 @@ OpenLM benefits all Software Asset Management (SAM) role players in the organiza
 importUsers2OpenLM is a free, open-source software tool that was implemented according to OpenLM’s customers’ requests. It makes use of the OpenLM open APIs to easily introduce new users, user groups and projects from a CSV file into the OpenLM database. 
 
 ##Download and installation##
-importUsers2OpenLM is [published for free use on the github site](https://github.com/orengabay/importUsers2OpenLM/releases/tag/2.0.0). Simply download the openlm-userimport-2.0-full.zip file to your computer, and unzip it. Copy the unzipped folder to the OpenLM Server machine, adjacent the OpenLM Server installation folder, e.g.:
+importUsers2OpenLM is [published for free use on the github site](https://github.com/orengabay/importUsers2OpenLM/releases/tag/2.0.1). Simply download the openlm-userimport-2.0.1-full.zip file to your computer, and unzip it. Copy the unzipped folder to the OpenLM Server machine, adjacent the OpenLM Server installation folder, e.g.:
 C:\Program Files (x86)\OpenLM.
 You will need to have Java 8 installed on the OpenLM Server machine in order to run the tool. 
 
@@ -58,7 +58,7 @@ Notes:
 
 ##Running importUsers2OpenLM##
 Type the following string on a cmd line prompt to run the importUsers2OpenLM tool:  
-java -jar userimport-2.0-all.jar <csv file name or full path>
+java -jar userimport-2.0.1-all.jar <csv file name or full path>
 
 ##Example##
 On a clean OpenLM database I have defined: 
