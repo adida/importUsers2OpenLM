@@ -49,11 +49,11 @@ john.smith|John|Smith|John Smith|Mr.|Dept|(555)-555-55-55|Description|Office|joh
 
 ##Import Group Tree##
 The tool allows to import groups from CSV file of the following layout. See groups.csv as example
+
 Id|Name|ParentId
 --------|---------|--------
-1|Top Level|
+1|Top Level
 2|Sub-Group|1
-
 
 Notes:  
 1. __CSV format__  
