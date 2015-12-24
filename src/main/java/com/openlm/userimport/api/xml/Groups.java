@@ -8,7 +8,6 @@ import java.util.List;
 /**
  * This class represents...
  */
-@XmlRootElement(name = "GROUPS")
 public class Groups extends AbstractEntityList<Group>{
     @XmlElement(name = "GROUP")
     @Override

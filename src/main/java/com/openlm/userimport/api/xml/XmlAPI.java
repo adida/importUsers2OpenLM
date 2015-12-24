@@ -212,6 +212,24 @@ public class XmlAPI implements IOpenLMServerAPI {
         //Process response and extract users when listed in userNames
     }
 
+    @Override
+    public void updateGroup(String id, String name, String parentId, String prevParentId) {
+        send(request(UpdateGroup)
+                        .parameter("group_id", id)
+                        .parameter("group_name", name)
+                        .parameter("group_parent_id", parentId)
+                        .parameter("group_prev_parent_id", prevParentId),
+                Success);
+    }
+
+    @Override
+    public Groups getGroupDetails(String id, String name) {
+        return send(request(GetGroupDetails)
+                        .parameter("group_id", id)
+                        .parameter("group_name", name),
+                GroupDetails).parentGroups;
+    }
+
 
     private void handleError(ULM authResponse) {
         if(authResponse.message.type == Error){

@@ -1,6 +1,7 @@
 package com.openlm.userimport.api;
 
 import com.openlm.userimport.User;
+import com.openlm.userimport.api.xml.Groups;
 
 import java.util.List;
 import java.util.Map;
@@ -22,4 +23,8 @@ public interface IOpenLMServerAPI {
     void updateUser(User user);
 
     void loadExistingUsers(List<String> userNames);
+
+    void updateGroup(String id, String name, String parentId, String prevParentId);
+
+    Groups getGroupDetails(String id, String name);
 }

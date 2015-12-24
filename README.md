@@ -34,7 +34,8 @@ Edit the content of this file to change the importUsers2OpenLM settings:
 * merge.user.details.on.update (Default - True):
   * True: Empty CSV fields are merged with values from existing users’ records.
   * False: Empty CSV fields override values from existing users’ records.
-
+* csv.format.delimiter (Default - comma (,))
+  * You may want to change it to semicolon (;) if you produced CSV file from MS Excel
 
 ###2. datasource.csv###
 Open the datasource.csv file:  
@@ -45,6 +46,14 @@ By default, the datasource.csv file already contains a single user (John Smith) 
 UserName|FirstName|LastName|DisplayName|Title|Department|PhoneNumber|Description|Office|Email|Enabled|Groups|DefaultGroup|Projects|DefaultProject
 --------|---------|--------|-----------|-----|----------|-----------|-----------|------|-----|-------|------|------------|--------|-------------
 john.smith|John|Smith|John Smith|Mr.|Dept|(555)-555-55-55|Description|Office|john@gmail.com|true|group1&#124;group2|group1|project1&#124;project2|project1
+
+##Import Group Tree##
+The tool allows to import groups from CSV file of the following layout. See groups.csv as example
+Id|Name|ParentId|
+--------|---------|--------|
+1|Top Level||
+2|Sub-Group|1|
+
 
 Notes:  
 1. __CSV format__  

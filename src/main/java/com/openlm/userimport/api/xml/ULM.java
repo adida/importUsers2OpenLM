@@ -36,6 +36,8 @@ public class ULM {
     Projects projects;
     @XmlElement(name = "GROUPS")
     Groups groups;
+    @XmlElement(name = "PARENT_GROUPS")
+    Groups parentGroups;
 
     @XmlElement(name = "PAGING")
     Paging paging;

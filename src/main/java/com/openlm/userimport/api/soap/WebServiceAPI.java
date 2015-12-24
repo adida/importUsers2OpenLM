@@ -2,10 +2,12 @@ package com.openlm.userimport.api.soap;
 
 import com.openlm.userimport.User;
 import com.openlm.userimport.api.IOpenLMServerAPI;
+import com.openlm.userimport.api.xml.Groups;
 import org.datacontract.schemas._2004._07.openlm_server.SessionRefresh;
 import org.datacontract.schemas._2004._07.openlm_server_services.*;
 import org.datacontract.schemas._2004._07.system_collections.KeyValuePairOfintstring;
 import services.server.openlm.IAdminAPI;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -104,16 +106,26 @@ public class WebServiceAPI implements IOpenLMServerAPI {
 
     @Override
     public void createUser(User user) {
-
+        throw new NotImplementedException();
     }
 
     @Override
     public void updateUser(User user) {
-
+        throw new NotImplementedException();
     }
 
     @Override
     public void loadExistingUsers(List<String> userNames) {
+        throw new NotImplementedException();
+    }
 
+    @Override
+    public void updateGroup(String id, String name, String parentId, String prevParentId) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public Groups getGroupDetails(String id, String name) {
+        throw new NotImplementedException();
     }
 }

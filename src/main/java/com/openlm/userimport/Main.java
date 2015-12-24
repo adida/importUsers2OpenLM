@@ -1,8 +1,10 @@
 package com.openlm.userimport;
 
 import com.openlm.userimport.api.IOpenLMServerAPI;
+import com.openlm.userimport.api.xml.Groups;
 import com.openlm.userimport.api.xml.XmlAPI;
 import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
 import java.io.*;
@@ -27,19 +29,31 @@ public class Main{
 
     final boolean mergeUserDetailsOnUpdate;
     final boolean allowToAddMissingEntities;
+    final char delimiter;
 
     String sessionId;
+    Format format;
+
 
     public Main(File csv, Properties configuration) {
         this.csv = csv;
         this.configuration = configuration;
         this.allowToAddMissingEntities = Boolean.parseBoolean(configuration.getProperty("allow.to.add.entities"));
         this.mergeUserDetailsOnUpdate = Boolean.parseBoolean(configuration.getProperty("merge.user.details.on.update"));
+        this.delimiter = getDelimiter("csv.format.delimiter");
+
         try {
             this.serverApi = new XmlAPI(configuration.getProperty("xml.api.url"), () -> sessionId);
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private char getDelimiter(String key) {
+        String delimiter = configuration.getProperty(key);
+        if(delimiter == null) delimiter = ",";
+        delimiter = delimiter.trim();
+        return delimiter.charAt(0);
     }
 
     public static void main(String[] args) {
@@ -60,7 +74,29 @@ public class Main{
 
     private void run() {
         authenticate();
-        readCSV((record) -> {
+        readCSV((parser) -> {
+            Map<String, Integer> headerMap = parser.getHeaderMap();
+            this.format = detectFormat(headerMap);
+        });
+        this.format.runImport(this);
+    }
+
+    private Format detectFormat(Map<String, Integer> header) {
+        if(containsKeys(header, "UserName", "FirstName", "LastName")) return Format.users;
+        if(containsKeys(header, "Id", "Name", "ParentId")) return Format.groups;
+        throw new RuntimeException("Unknown CSV format. Please check CSV file headers");
+    }
+
+    private boolean containsKeys(Map<String, Integer> header, String ... keys) {
+        boolean contains = true;
+        for (String key : keys) {
+            contains &= header.containsKey(key);
+        }
+        return contains;
+    }
+
+    private void importUsers() {
+        readCSVRecords((record) -> {
             collect(record, "Groups", this.groups);
             collect(record, "Projects", this.projects);
             this.userNamesToImport.add(record.get("UserName"));
@@ -72,9 +108,47 @@ public class Main{
         loadAndUpdateGroups();
         loadAndUpdateProjects();
 //        this.serverApi.loadExistingUsers(this.userNamesToImport);
-        readCSV(this::importUser);
+        readCSVRecords(this::importUser);
 //        printSummary();
     }
+
+
+    private void importGroups() {
+        Map<String, String> existingGroups = this.serverApi.loadGroups();
+        //Create new groups
+        readCSVRecords(record -> {
+            String name = record.get("Name");
+            if(!existingGroups.containsKey(name)){
+                this.serverApi.createGroup(name);
+            }
+        });
+        Map<String, String> allGroups = this.serverApi.loadGroups();
+        //Create file to openlm id mapping
+        Map<String, String> fileToOpenLMIdMap = new HashMap<>();
+        readCSVRecords(record -> {
+            String name = record.get("Name");
+            String fileId = record.get("Id");
+            String openlmId = allGroups.get(name);
+            fileToOpenLMIdMap.put(fileId, openlmId);
+        });
+        //Assign parent id
+        readCSVRecords(record -> {
+            String name = record.get("Name");
+            String fileParentId = record.get("ParentId");
+            String parentId = fileToOpenLMIdMap.get(fileParentId);
+            String fileId = record.get("Id");
+            String id = fileToOpenLMIdMap.get(fileId);
+            Groups parents = this.serverApi.getGroupDetails(id, name);
+
+            String prevParentId =
+                    parents.getList().isEmpty()
+                            ? allGroups.get("OpenLM Groups")
+                            : parents.getList().get(0).getId();
+
+            this.serverApi.updateGroup(id, name, parentId, prevParentId);
+        });
+    }
+
 
     private void importUser(CSVRecord csv) {
         String userName = csv.get("UserName");
@@ -170,16 +244,23 @@ public class Main{
         }
     }
 
-    private void readCSV(Consumer<CSVRecord> consumer) {
+    private void readCSV(Consumer<CSVParser> consumer) {
         try (Reader reader = new BufferedReader(new FileReader(csv))) {
-            CSVFormat.DEFAULT
+            CSVParser parser = CSVFormat.DEFAULT
                     .withHeader()
                     .withNullString("")
-                    .parse(reader).iterator()
-                    .forEachRemaining(consumer);
+                    .withDelimiter(this.delimiter)
+                    .parse(reader);
+            consumer.accept(parser);
         } catch (IOException e) {
             throw new RuntimeException("CSV read failure", e);
         }
+    }
+
+    private void readCSVRecords(Consumer<CSVRecord> consumer) {
+        readCSV(p -> {
+            p.iterator().forEachRemaining(consumer);
+        });
     }
 
     private void collect(CSVRecord record, String name, Map<String, String> collectTo) {
@@ -222,4 +303,21 @@ public class Main{
         }
         return csv;
     }
+
+    enum Format {
+        users {
+            @Override
+            void runImport(Main main) {
+                main.importUsers();
+            }
+        },
+        groups {
+            @Override
+            void runImport(Main main) {
+                main.importGroups();
+            }
+        };
+        abstract void runImport(Main main);
+    }
+
 }

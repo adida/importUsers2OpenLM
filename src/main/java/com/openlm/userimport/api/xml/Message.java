@@ -13,8 +13,10 @@ public class Message {
         //Request
         GetProjectsList,
         GetGroupsList,
+        GetGroupDetails,
         GetUserDetails2,
         AddGroup2,
+        UpdateGroup,
         AddUser2,
         AddProject,
         UpdateUserDetails2,
@@ -32,6 +34,7 @@ public class Message {
         UsersList,
         ProjectAdded,
         UserDetails,
+        GroupDetails,
         Success,
         Error
     }
