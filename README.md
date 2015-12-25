@@ -47,14 +47,6 @@ UserName|FirstName|LastName|DisplayName|Title|Department|PhoneNumber|Description
 --------|---------|--------|-----------|-----|----------|-----------|-----------|------|-----|-------|------|------------|--------|-------------
 john.smith|John|Smith|John Smith|Mr.|Dept|(555)-555-55-55|Description|Office|john@gmail.com|true|group1&#124;group2|group1|project1&#124;project2|project1
 
-##Import Group Tree##
-The tool allows to import groups from CSV file of the following layout. See groups.csv as example
-
-Id|Name|ParentId
---------|---------|--------
-1|Top Level
-2|Sub-Group|1
-
 Notes:  
 1. __CSV format__  
    Some spreadsheet editors may add additional delimiters to the file (e.g. Tabs) during save. Take care to save the CSV file as a valid Comma separated file.  
@@ -65,9 +57,24 @@ Notes:
 4. __Default Project:__      
    Project license usage will be attributed to this project by default. License usage may be dynamically routed to other projects in which the user is a member of. [Read more about this here](https://www.openlm.com/application-notes-v3-0/monitoring-app-usage-v3-0-2/license-usage-monitoring-according-to-projects-an4030/).
 
+
+###3. groups.csv###
+Open the groups.csv file, and edit it to reflect the group hierarchy, e.g.: 
+
+
+Id|Name|ParentId
+--------|---------|--------
+1|group1
+2|group2|1
+
+This table reflects a hierarchical structure, with group1 at the top, and group2 as a subsidiary to group1.
+
 ##Running importUsers2OpenLM##
-Type the following string on a cmd line prompt to run the importUsers2OpenLM tool:  
-java -jar userimport-2.0.1-all.jar <csv file name or full path>
+* Make sure that the csv.format.delimiter is set correctly.
+* Type the following string on a cmd line prompt to run the importUsers2OpenLM tool:  
+  java -jar userimport-2.0.1-all.jar <csv file name or full path>   e.g:
+  * java -jar userimport-2.0.1-all.jar groups.csv
+  * java -jar userimport-2.0.1-all.jar datasource.csv
 
 ##Example##
 On a clean OpenLM database I have defined: 
