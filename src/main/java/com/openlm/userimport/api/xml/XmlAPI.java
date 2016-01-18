@@ -5,6 +5,8 @@ import com.openlm.userimport.api.IOpenLMServerAPI;
 import org.apache.commons.io.IOUtils;
 
 import javax.xml.bind.JAXBException;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -40,6 +42,9 @@ public class XmlAPI implements IOpenLMServerAPI {
         try {
             HttpURLConnection con = (HttpURLConnection) this.url.openConnection();
             con.setRequestMethod("POST");
+            con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+            con.setRequestProperty("X-Requested-With", "XMLHttpRequest");
+            con.setDoInput(true);
             con.setDoOutput(true);
             OutputStream out = con.getOutputStream();
             ByteArrayOutputStream req = new ByteArrayOutputStream();
@@ -64,7 +69,7 @@ public class XmlAPI implements IOpenLMServerAPI {
                 throwUnexpected();
             }
             return result;
-        } catch (JAXBException | IOException e) {
+        } catch (JAXBException | IOException | ParserConfigurationException | TransformerException e) {
             throw new RuntimeException(e);
         }
     }

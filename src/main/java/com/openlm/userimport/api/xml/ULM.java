@@ -1,5 +1,7 @@
 package com.openlm.userimport.api.xml;
 
+import org.w3c.dom.Node;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -8,8 +10,19 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -64,11 +77,22 @@ public class ULM {
         this.session = new Session(sessionId);
     }
 
-    public void printXml(OutputStream out) throws JAXBException {
+    public void printXml(OutputStream out) throws JAXBException, TransformerException, ParserConfigurationException {
         JAXBContext context = JAXBContext.newInstance(getClass());
         Marshaller marshaller = context.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        marshaller.marshal(this, out);
+
+        //Hack to wrap PARAM value with CDATA
+        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+        Node document = documentBuilder.newDocument();
+        marshaller.marshal(this, document);
+
+        Transformer nullTransformer = TransformerFactory.newInstance().newTransformer();
+        nullTransformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        nullTransformer.setOutputProperty(OutputKeys.CDATA_SECTION_ELEMENTS, "PARAM");
+        nullTransformer.transform(new DOMSource(document), new StreamResult(out));
+
     }
 
     public static ULM parse(InputStream in) throws JAXBException {
@@ -83,6 +107,11 @@ public class ULM {
             this.parameters.list = new ArrayList<>();
         }
         if(value != null && !value.isEmpty()) {
+            try {
+                value = URLEncoder.encode(value, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
             this.parameters.list.add(new Parameter(name, value));
         }
         return this;
